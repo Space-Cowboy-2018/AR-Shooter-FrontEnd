@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { AR, Asset, Location, Permissions } from 'expo';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import { Button } from 'native-base';
@@ -71,10 +71,13 @@ export default class App extends React.Component {
     this.scene.background = new ThreeAR.BackgroundTexture(this.renderer);
     // Now we make a camera that matches the device orientation.
     // Ex: When we look down this camera will rotate to look down too!
+
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const crossHairGeometry = new THREE.geometry();
+    const crossHairMaterial = new THREE.LineBasicMaterial({ color: 0xaaffaa });
     // Simple color material
     const material = new THREE.MeshPhongMaterial({
       color: 0xff00ff
