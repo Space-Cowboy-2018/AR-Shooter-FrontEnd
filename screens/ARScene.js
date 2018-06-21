@@ -96,7 +96,6 @@ export default class App extends React.Component {
     // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
 
-    // Create this cool utility function that let's us see all the raw data points. 
     this.scene.add(this.cube);
   };
 
@@ -114,8 +113,6 @@ export default class App extends React.Component {
 
   // Called every frame.
   onRender = async () => {
-    // This will make the points get more rawDataPoints from Expo.AR
-    this.points.update();
     // Finally render the scene with the AR Camera
     this.cube.rotation.x += 0.07;
     this.cube.rotation.y += 0.04;
