@@ -2,3 +2,5 @@ node_modules/**/*
 .expo/*
 npm-debug.*
 package-lock.json
+/.vs
+.vs
