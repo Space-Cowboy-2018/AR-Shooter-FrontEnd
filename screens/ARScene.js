@@ -74,11 +74,35 @@ export default class App extends React.Component {
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
+    var x = 0.01;
+    var y = 0.01;
+    const crossHairGeometry = new THREE.Geometry();
+    const crossHairMaterial = new THREE.LineBasicMaterial({ color: 0xaaffaa });
+
+    crossHairGeometry.vertices.push(new THREE.Vector3(0, y, 0));
+    crossHairGeometry.vertices.push(new THREE.Vector3(0, -y, 0));
+    crossHairGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    crossHairGeometry.vertices.push(new THREE.Vector3(x, 0, 0));
+    crossHairGeometry.vertices.push(new THREE.Vector3(-x, 0, 0));
+
+    this.crosshair = new THREE.Line(crossHairGeometry, crossHairMaterial);
+
+    // place it in the center
+    var crosshairPercentX = 50;
+    var crosshairPercentY = 50;
+    var crosshairPositionX = (crosshairPercentX / 100) * 2 - 1;
+    var crosshairPositionY = (crosshairPercentY / 100) * 2 - 1;
+
+    this.crosshair.position.x = crosshairPositionX * this.camera.aspect;
+    this.crosshair.position.y = crosshairPositionY;
+
+    this.crosshair.position.z = -0.3;
+    this.scene.add(this.crosshair);
+    //CUBE
+    // Simple color material
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-    const crossHairGeometry = new THREE.geometry();
-    const crossHairMaterial = new THREE.LineBasicMaterial({ color: 0xaaffaa });
-    // Simple color material
+
     const material = new THREE.MeshPhongMaterial({
       color: 0xff00ff
     });
