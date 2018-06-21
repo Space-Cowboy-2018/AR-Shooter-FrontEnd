@@ -8,7 +8,7 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 // Let's also import `expo-graphics`
 // expo-graphics manages the setup/teardown of the gl context/ar session, creates a frame-loop, and observes size/orientation changes.
 // it also provides debug information with `isArCameraStateEnabled`
-import { View as GraphicsView} from 'expo-graphics';
+import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
 import io from 'socket.io-client';
@@ -96,10 +96,7 @@ export default class App extends React.Component {
     // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
 
-    // Create this cool utility function that let's us see all the raw data points.
-    this.points = new ThreeAR.Points();
-    // Add the points to our scene...
-    this.scene.add(this.points);
+    // Create this cool utility function that let's us see all the raw data points. 
     this.scene.add(this.cube);
   };
 
