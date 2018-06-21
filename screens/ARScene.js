@@ -1,28 +1,36 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { AR, Asset, Location, Permissions } from 'expo';
+import React from "react";
+import { View, Text, Button } from "react-native";
+import { AR, Asset, Location, Permissions } from "expo";
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
-import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
+import ExpoTHREE, { AR as ThreeAR, THREE } from "expo-three";
 // Let's also import `expo-graphics`
 // expo-graphics manages the setup/teardown of the gl context/ar session, creates a frame-loop, and observes size/orientation changes.
 // it also provides debug information with `isArCameraStateEnabled`
-import { View as GraphicsView, ARRunningState } from 'expo-graphics';
+import { View as GraphicsView, ARRunningState } from "expo-graphics";
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
-const host = 'https://ar-shooter-server.herokuapp.com/';
+const host = "http://172.16.25.175:3030";
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io(host);
-    this.socket.on('connect', () => {});
+    this.socket.on("connect", () => {});
+    this.position = new THREE.Vector3();
+    this.aim = new THREE.Vector3();
   }
   componentDidMount() {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings();
+
+    this.socket.on("shot", payload => {
+      console.log("shooter's position", payload.x, payload.y);
+      console.log("our position", this.position.x, this.position.y);
+      this.socket.emit('gothit?', this.position);
+    });
   }
 
   render() {
@@ -45,7 +53,7 @@ export default class App extends React.Component {
         />
         <View style={{ flex: 1 }}>
           <Button
-            style={{ border: '1px solid black', zIndex: 1000 }}
+            style={{ border: "1px solid black", zIndex: 1000 }}
             title="shoot"
             onPress={this.showPosition}
           />
@@ -119,16 +127,12 @@ export default class App extends React.Component {
     // Finally render the scene with the AR Camera
     this.cube.rotation.x += 0.07;
     this.cube.rotation.y += 0.04;
+    this.camera.getWorldPosition(this.position);
+    this.camera.getWorldDirection(this.aim);
     this.renderer.render(this.scene, this.camera);
   };
 
   showPosition = () => {
-    let aim = new THREE.Vector3();
-    let position = new THREE.Vector3();
-    // current position
-    this.camera.getWorldPosition(position);
-    // current direction
-    this.camera.getWorldDirection(aim);
     // Assuming player2 is at position (1, -1), (x, z)
     // Player one facing negative z axis.
     // flip z axis sign for player facing positive z axis.
@@ -167,6 +171,6 @@ export default class App extends React.Component {
     // if (/*bufferTheta < 0.1 && */ bufferX < 0.05 && bufferZ < 0.05)
     //   console.log('HIT!!!!');
     // else console.log('miss....');
-    this.socket.emit('position', { position, aim });
+    this.socket.emit("position", { position: this.position, aim: this.aim });
   };
 }
