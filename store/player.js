@@ -25,6 +25,32 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case SET_NAME:
+      return {
+        ...state,
+        position: { ...state.position },
+        direction: { ...state.direction },
+        name: action.name
+      };
+    case SET_HEALTH:
+      return {
+        ...state,
+        position: { ...state.position },
+        direction: { ...state.direction },
+        health: action.health
+      };
+    case SET_POSITION:
+      return {
+        ...state,
+        position: action.position,
+        direction: { ...state.direction }
+      };
+    case SET_DIRECTION:
+      return {
+        ...state,
+        direction: action.direction,
+        position: { ...state.position }
+      };
     default:
       return state;
   }
