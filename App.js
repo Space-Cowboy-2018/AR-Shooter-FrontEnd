@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import Home from './screens/home';
 import ARScene from './screens/ARScene';
+import GameOver from './screens/gameOver';
 import { Font, AppLoading } from 'expo';
 
 export default class App extends React.Component {
@@ -32,7 +33,8 @@ export default class App extends React.Component {
 const RootNavigator = createStackNavigator(
   {
     Home: { screen: Home },
-    ARScene: { screen: ARScene }
+    ARScene: { screen: ARScene },
+    GameOver: { screen: GameOver }
   },
   {
     headerMode: 'none',

@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { AR, Asset, Location, Permissions } from 'expo';
+import { View, Text, Image } from 'react-native';
+import { AR } from 'expo';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
+import { Button } from 'native-base';
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
+
 // Let's also import `expo-graphics`
 // expo-graphics manages the setup/teardown of the gl context/ar session, creates a frame-loop, and observes size/orientation changes.
 // it also provides debug information with `isArCameraStateEnabled`
-import { View as GraphicsView, ARRunningState } from 'expo-graphics';
+import { View as GraphicsView} from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
 import io from 'socket.io-client';
@@ -43,13 +45,10 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
-        <View style={{ flex: 1 }}>
-          <Button
-            style={{ border: '1px solid black', zIndex: 1000 }}
-            title="shoot"
-            onPress={this.showPosition}
-          />
-        </View>
+
+        <Button onPress={this.showPosition} full light>
+          <Text> Shoot </Text>
+        </Button>
       </View>
     );
   }
@@ -57,6 +56,7 @@ export default class App extends React.Component {
   // When our context is built we can start coding 3D things.
   onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
     // This will allow ARKit to collect Horizontal surfaces
+
     AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
 
     // Create a 3D renderer
@@ -73,22 +73,24 @@ export default class App extends React.Component {
     this.scene.background = new ThreeAR.BackgroundTexture(this.renderer);
     // Now we make a camera that matches the device orientation.
     // Ex: When we look down this camera will rotate to look down too!
+
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
+    //CUBE
+    // Simple color material
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-    // Simple color material
+
     const material = new THREE.MeshPhongMaterial({
       color: 0xff00ff
     });
 
     // Combine our geometry and material
     this.cube = new THREE.Mesh(geometry, material);
-
     this.cube.position.z = -1;
     this.cube.position.x = 1;
     // Add the cube to the scene
-    this.scene.add(this.cube);
+    //=======================================================================
 
     // Setup a light so we can see the cube color
     // AmbientLight colors all things in the scene equally.
@@ -98,6 +100,7 @@ export default class App extends React.Component {
     this.points = new ThreeAR.Points();
     // Add the points to our scene...
     this.scene.add(this.points);
+    this.scene.add(this.cube);
   };
 
   // When the phone rotates, or the view changes size, this method will be called.

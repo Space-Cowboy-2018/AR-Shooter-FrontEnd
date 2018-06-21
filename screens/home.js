@@ -22,8 +22,6 @@ export default class FloatingLabelExample extends Component {
     navigate('ARScene');
   }
   render() {
-    console.log(this.props);
-
     return (
       <View style={styles.main}>
         <Content style={styles.items}>
@@ -36,7 +34,7 @@ export default class FloatingLabelExample extends Component {
           </Form>
         </Content>
         <Button onPress={this.handlePress} style={{ marginTop: 40 }} full light>
-          <Text style={{letterSpacing: 2}}>Start Game</Text>
+          <Text style={{ letterSpacing: 2 }}>Start Game</Text>
         </Button>
       </View>
     );
