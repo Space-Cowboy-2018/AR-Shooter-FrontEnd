@@ -11,7 +11,7 @@ import { View as GraphicsView, ARRunningState } from 'expo-graphics';
 
 import io from 'socket.io-client';
 
-const host = 'http://192.168.1.22:3030';
+const host = 'https://ar-shooter-server.herokuapp.com/';
 
 export default class App extends React.Component {
   constructor(props) {
