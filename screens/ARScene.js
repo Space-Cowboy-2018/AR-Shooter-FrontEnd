@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { AR } from 'expo';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import { Button } from 'native-base';
@@ -34,7 +34,7 @@ export default class App extends React.Component {
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
     return (
-      <View style={{ flex: 1 }}>
+      <TouchableOpacity style={{ flex: 1 }} onPress={this.showPosition}>
         <GraphicsView
           style={{ flex: 5 }}
           onContextCreate={this.onContextCreate}
@@ -45,11 +45,7 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
-
-        <Button onPress={this.showPosition} full light>
-          <Text> Shoot </Text>
-        </Button>
-      </View>
+      </TouchableOpacity>
     );
   }
 
