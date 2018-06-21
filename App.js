@@ -3,10 +3,29 @@ import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import Home from './screens/home';
 import ARScene from './screens/ARScene';
+import { Font, AppLoading } from 'expo';
 
 export default class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      fontLoaded: false
+    };
+  }
+  async componentDidMount() {
+    await Font.loadAsync({
+      Orbitron: require('./assets/fonts/Orbitron/Orbitron-Regular.ttf'),
+      Teko: require('./assets/fonts/Teko/Teko-Regular.ttf')
+    });
+
+    this.setState({ fontLoaded: true });
+  }
+
   render() {
-    return <RootNavigator />;
+    if (this.state.fontLoaded) {
+      return <RootNavigator />;
+    }
+    return <AppLoading />;
   }
 }
 

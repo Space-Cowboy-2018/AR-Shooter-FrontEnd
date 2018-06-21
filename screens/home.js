@@ -13,20 +13,21 @@ import { Text, View } from 'react-native';
 export default class FloatingLabelExample extends Component {
   constructor() {
     super();
+
     this.handlePress = this.handlePress.bind(this);
   }
 
   handlePress() {
     const { navigate } = this.props.navigation;
     navigate('ARScene');
-    // const { navigate } = this.props.navigation;
-    // navigate(ARScene);
   }
   render() {
+    console.log(this.props);
+
     return (
       <View style={styles.main}>
         <Content style={styles.items}>
-          <Text style={styles.title}>AR Shooter</Text>
+          <Text style={styles.title}>AR SHOOTER </Text>
           <Form>
             <Item floatingLabel>
               <Label>Name</Label>
@@ -35,7 +36,7 @@ export default class FloatingLabelExample extends Component {
           </Form>
         </Content>
         <Button onPress={this.handlePress} style={{ marginTop: 40 }} full light>
-          <Text>Start Game</Text>
+          <Text style={{letterSpacing: 2}}>Start Game</Text>
         </Button>
       </View>
     );
@@ -49,9 +50,10 @@ const styles = {
     justifyContent: 'space-between'
   },
   title: {
+    fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
-    margin: 30,
+    marginTop: 60,
     letterSpacing: 2
   },
   items: {
