@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import { AR, Asset, Location, Permissions } from 'expo';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
+import { Button } from 'native-base';
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 // Let's also import `expo-graphics`
 // expo-graphics manages the setup/teardown of the gl context/ar session, creates a frame-loop, and observes size/orientation changes.
@@ -43,13 +44,10 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
-        <View style={{ flex: 1 }}>
-          <Button
-            style={{ border: '1px solid black', zIndex: 1000 }}
-            title="shoot"
-            onPress={this.showPosition}
-          />
-        </View>
+
+        <Button onPress={this.showPosition} full light>
+          <Text> Shoot </Text>
+        </Button>
       </View>
     );
   }
