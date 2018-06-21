@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import { AR, Asset, Location, Permissions } from 'expo';
+import { AR } from 'expo';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import { Button } from 'native-base';
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
+
 // Let's also import `expo-graphics`
 // expo-graphics manages the setup/teardown of the gl context/ar session, creates a frame-loop, and observes size/orientation changes.
 // it also provides debug information with `isArCameraStateEnabled`
-import { View as GraphicsView, ARRunningState } from 'expo-graphics';
+import { View as GraphicsView} from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
 import io from 'socket.io-client';
@@ -55,6 +56,7 @@ export default class App extends React.Component {
   // When our context is built we can start coding 3D things.
   onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
     // This will allow ARKit to collect Horizontal surfaces
+
     AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
 
     // Create a 3D renderer
@@ -74,30 +76,6 @@ export default class App extends React.Component {
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
-    var x = 0.01;
-    var y = 0.01;
-    const crossHairGeometry = new THREE.Geometry();
-    const crossHairMaterial = new THREE.LineBasicMaterial({ color: 0xaaffaa });
-
-    crossHairGeometry.vertices.push(new THREE.Vector3(0, y, 0));
-    crossHairGeometry.vertices.push(new THREE.Vector3(0, -y, 0));
-    crossHairGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    crossHairGeometry.vertices.push(new THREE.Vector3(x, 0, 0));
-    crossHairGeometry.vertices.push(new THREE.Vector3(-x, 0, 0));
-
-    this.crosshair = new THREE.Line(crossHairGeometry, crossHairMaterial);
-
-    // place it in the center
-    var crosshairPercentX = 50;
-    var crosshairPercentY = 50;
-    var crosshairPositionX = (crosshairPercentX / 100) * 2 - 1;
-    var crosshairPositionY = (crosshairPercentY / 100) * 2 - 1;
-
-    this.crosshair.position.x = crosshairPositionX * this.camera.aspect;
-    this.crosshair.position.y = crosshairPositionY;
-
-    this.crosshair.position.z = -0.3;
-    this.scene.add(this.crosshair);
     //CUBE
     // Simple color material
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
@@ -109,11 +87,10 @@ export default class App extends React.Component {
 
     // Combine our geometry and material
     this.cube = new THREE.Mesh(geometry, material);
-
     this.cube.position.z = -1;
     this.cube.position.x = 1;
     // Add the cube to the scene
-    this.scene.add(this.cube);
+    //=======================================================================
 
     // Setup a light so we can see the cube color
     // AmbientLight colors all things in the scene equally.
@@ -123,6 +100,7 @@ export default class App extends React.Component {
     this.points = new ThreeAR.Points();
     // Add the points to our scene...
     this.scene.add(this.points);
+    this.scene.add(this.cube);
   };
 
   // When the phone rotates, or the view changes size, this method will be called.
