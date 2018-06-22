@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client';
 import {
   Container,
   Header,
@@ -10,16 +11,18 @@ import {
   Button
 } from 'native-base';
 import { Text, View } from 'react-native';
+const host = "http://172.16.25.175:3030";
+
 export default class FloatingLabelExample extends Component {
   constructor() {
     super();
-
+    this.socket = io(host);
     this.handlePress = this.handlePress.bind(this);
   }
 
   handlePress() {
     const { navigate } = this.props.navigation;
-    navigate('ARScene');
+    navigate('ARScene', {socket: this.socket});
   }
   render() {
     return (

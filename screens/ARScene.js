@@ -18,8 +18,6 @@ const host = "http://172.16.25.175:3030";
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.socket = io(host);
-    this.socket.on("connect", () => {});
     this.position = new THREE.Vector3();
     this.aim = new THREE.Vector3();
   }
@@ -27,11 +25,10 @@ export default class App extends React.Component {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings();
-
-    this.socket.on("shot", payload => {
+    this.props.navigation.state.params.socket.on("shot", payload => {
       console.log("shooter's position", payload.x, payload.y);
       console.log("our position", this.position.x, this.position.y);
-      this.socket.emit('gothit?', this.position);
+      this.props.navigation.state.params.socket.emit('gothit?', this.position);
     });
   }
 
@@ -164,6 +161,6 @@ export default class App extends React.Component {
     // if (/*bufferTheta < 0.1 && */ bufferX < 0.05 && bufferZ < 0.05)
     //   console.log('HIT!!!!');
     // else console.log('miss....');
-    this.socket.emit("position", { position: this.position, aim: this.aim });
+    this.props.navigation.state.params.socket.emit("position", { position: this.position, aim: this.aim });
   };
 }
