@@ -11,20 +11,28 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
-const host = 'https://ar-shooter-server.herokuapp.com/';
+const host = "http://172.16.25.175:3030";
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io(host);
-    this.socket.on('connect', () => {});
+    this.socket.on("connect", () => {});
+    this.position = new THREE.Vector3();
+    this.aim = new THREE.Vector3();
   }
   componentDidMount() {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings();
+
+    this.socket.on("shot", payload => {
+      console.log("shooter's position", payload.x, payload.y);
+      console.log("our position", this.position.x, this.position.y);
+      this.socket.emit('gothit?', this.position);
+    });
   }
 
   render() {
@@ -112,54 +120,50 @@ export default class App extends React.Component {
     // Finally render the scene with the AR Camera
     this.cube.rotation.x += 0.07;
     this.cube.rotation.y += 0.04;
+    this.camera.getWorldPosition(this.position);
+    this.camera.getWorldDirection(this.aim);
     this.renderer.render(this.scene, this.camera);
   };
 
   showPosition = () => {
-    let aim = new THREE.Vector3();
-    let position = new THREE.Vector3();
-    // current position
-    this.camera.getWorldPosition(position);
-    // current direction
-    this.camera.getWorldDirection(aim);
     // Assuming player2 is at position (1, -1), (x, z)
     // Player one facing negative z axis.
     // flip z axis sign for player facing positive z axis.
     // player2x - player1x
-    let x = 1 - position.x;
-    // player1z - player2z
-    let z = position.z + 1;
-    // angle needed to hit.
-    let thetaNeeded = Math.atan(x / z);
-    // actual viewing angle.
-    let theta = Math.atan(aim.x / aim.z); // positive if on other side of z axis.
-    if (aim.z < 0) theta *= -1;
-    console.log('theta needed: ', THREE.Math.radToDeg(thetaNeeded));
-    console.log('current theta: ', THREE.Math.radToDeg(theta));
-    // pythagorean thm.
-    let magnitude = Math.sqrt(
-      Math.pow(1 - position.x, 2) + Math.pow(position.z + 1, 2)
-    );
-    // xsin(theta)
-    let vx = Math.sin(theta) * magnitude;
-    // zcos(theta)
-    let vz = Math.cos(theta) * magnitude; // positive if on other side of z axis.
-    if (aim.z < 0) vz *= -1;
-    // given theta and origin => destination.
-    const destination = {
-      x: position.x + vx,
-      z: position.z + vz
-    };
-    console.log(`destination: (${destination.x}, ${destination.z})`);
-    // let bufferTheta = Math.abs(theta - thetaNeeded);
-    let bufferX = Math.abs(1 - destination.x);
-    let bufferZ = Math.abs(destination.z + 1);
-    // console.log('bufferTheta: ', bufferTheta);
-    console.log('bufferX: ', bufferX);
-    console.log('bufferZ: ', bufferZ);
-    if (/*bufferTheta < 0.1 && */ bufferX < 0.05 && bufferZ < 0.05)
-      console.log('HIT!!!!');
-    else console.log('miss....');
-    this.socket.emit('position', { position, aim });
+    // let x = 1 - position.x;
+    // // player1z - player2z
+    // let z = position.z + 1;
+    // // angle needed to hit.
+    // let thetaNeeded = Math.atan(x / z);
+    // // actual viewing angle.
+    // let theta = Math.atan(aim.x / aim.z); // positive if on other side of z axis.
+    // if (aim.z < 0) theta *= -1;
+    // console.log('theta needed: ', THREE.Math.radToDeg(thetaNeeded));
+    // console.log('current theta: ', THREE.Math.radToDeg(theta));
+    // // pythagorean thm.
+    // let magnitude = Math.sqrt(
+    //   Math.pow(1 - position.x, 2) + Math.pow(position.z + 1, 2)
+    // );
+    // // xsin(theta)
+    // let vx = Math.sin(theta) * magnitude;
+    // // zcos(theta)
+    // let vz = Math.cos(theta) * magnitude; // positive if on other side of z axis.
+    // if (aim.z < 0) vz *= -1;
+    // // given theta and origin => destination.
+    // const destination = {
+    //   x: position.x + vx,
+    //   z: position.z + vz
+    // };
+    // console.log(`destination: (${destination.x}, ${destination.z})`);
+    // // let bufferTheta = Math.abs(theta - thetaNeeded);
+    // let bufferX = Math.abs(1 - destination.x);
+    // let bufferZ = Math.abs(destination.z + 1);
+    // // console.log('bufferTheta: ', bufferTheta);
+    // console.log('bufferX: ', bufferX);
+    // console.log('bufferZ: ', bufferZ);
+    // if (/*bufferTheta < 0.1 && */ bufferX < 0.05 && bufferZ < 0.05)
+    //   console.log('HIT!!!!');
+    // else console.log('miss....');
+    this.socket.emit("position", { position: this.position, aim: this.aim });
   };
 }
