@@ -118,21 +118,9 @@ export default class App extends React.Component {
     // Finally render the scene with the AR Camera
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
-    const theta =
-      this.aim.z < 0
-        ? -Math.atan(this.aim.x / this.aim.z)
-        : Math.atan(this.aim.x / this.aim.z);
-
-    // const phi =
-    //   this.aim.z < 0
-    //     ? -Math.atan(this.aim.y / this.aim.z)
-    //     : Math.atan(this.aim.y / this.aim.z);
-    const vectorX = Math.sin(theta);
-    // const vectorY = Math.sin(phi);
-    const vectorZ = this.aim.z < 0 ? -Math.cos(theta) : Math.cos(theta);
-    this.cube.position.x = this.position.x + vectorX;
-    // this.cube.position.y = this.position.y + vectorY;
-    this.cube.position.z = this.position.z + vectorZ;
+    this.cube.position.x = this.position.x + this.aim.x;
+    this.cube.position.y = this.position.y + this.aim.y;
+    this.cube.position.z = this.position.z + this.aim.z;
     this.renderer.render(this.scene, this.camera);
   };
 
