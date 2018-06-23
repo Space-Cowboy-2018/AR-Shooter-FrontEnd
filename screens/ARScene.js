@@ -11,9 +11,9 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
-const host = "http://172.16.25.175:3030";
+const host = 'http://172.16.25.175:3030';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -25,9 +25,9 @@ export default class App extends React.Component {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings();
-    this.props.navigation.state.params.socket.on("shot", payload => {
+    this.props.navigation.state.params.socket.on('shot', payload => {
       console.log("shooter's position", payload.x, payload.y);
-      console.log("our position", this.position.x, this.position.y);
+      console.log('our position', this.position.x, this.position.y);
       this.props.navigation.state.params.socket.emit('gothit?', this.position);
     });
   }
@@ -80,7 +80,7 @@ export default class App extends React.Component {
     //CUBE
     // Simple color material
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
-    const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const geometry = new THREE.BoxGeometry(0.01, 0.01, 0.01);
 
     const material = new THREE.MeshPhongMaterial({
       color: 0xff00ff
@@ -89,7 +89,8 @@ export default class App extends React.Component {
     // Combine our geometry and material
     this.cube = new THREE.Mesh(geometry, material);
     this.cube.position.z = -1;
-    this.cube.position.x = 1;
+    this.cube.position.x = this.camera.position.x;
+    this.cube.position.y = this.camera.position.y;
     // Add the cube to the scene
     //=======================================================================
 
@@ -115,10 +116,23 @@ export default class App extends React.Component {
   // Called every frame.
   onRender = async () => {
     // Finally render the scene with the AR Camera
-    this.cube.rotation.x += 0.07;
-    this.cube.rotation.y += 0.04;
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
+    const theta =
+      this.aim.z < 0
+        ? -Math.atan(this.aim.x / this.aim.z)
+        : Math.atan(this.aim.x / this.aim.z);
+
+    // const phi =
+    //   this.aim.z < 0
+    //     ? -Math.atan(this.aim.y / this.aim.z)
+    //     : Math.atan(this.aim.y / this.aim.z);
+    const vectorX = Math.sin(theta);
+    // const vectorY = Math.sin(phi);
+    const vectorZ = this.aim.z < 0 ? -Math.cos(theta) : Math.cos(theta);
+    this.cube.position.x = this.position.x + vectorX;
+    // this.cube.position.y = this.position.y + vectorY;
+    this.cube.position.z = this.position.z + vectorZ;
     this.renderer.render(this.scene, this.camera);
   };
 
@@ -161,6 +175,9 @@ export default class App extends React.Component {
     // if (/*bufferTheta < 0.1 && */ bufferX < 0.05 && bufferZ < 0.05)
     //   console.log('HIT!!!!');
     // else console.log('miss....');
-    this.props.navigation.state.params.socket.emit("position", { position: this.position, aim: this.aim });
+    this.props.navigation.state.params.socket.emit('position', {
+      position: this.position,
+      aim: this.aim
+    });
   };
 }
