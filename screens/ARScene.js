@@ -11,10 +11,6 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
-import io from 'socket.io-client';
-
-const host = 'http://172.16.25.175:3030';
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
