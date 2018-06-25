@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { AR } from 'expo';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
-import { Button } from 'native-base';
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 
 // Let's also import `expo-graphics`
@@ -35,9 +34,15 @@ export default class App extends React.Component {
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
     return (
-      <TouchableOpacity style={{ flex: 1 }} onPress={this.showPosition}>
+      <TouchableOpacity
+        style={{
+          flex: 1
+        }}
+        onPress={this.showPosition}>
         <GraphicsView
-          style={{ flex: 5 }}
+          style={{
+            flex: 5
+          }}
           onContextCreate={this.onContextCreate}
           onRender={this.onRender}
           onResize={this.onResize}
@@ -45,7 +50,7 @@ export default class App extends React.Component {
           // isArRunningStateEnabled
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
-        />
+        />{' '}
       </TouchableOpacity>
     );
   }
@@ -72,6 +77,7 @@ export default class App extends React.Component {
     // Ex: When we look down this camera will rotate to look down too!
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
+    this.createCrosshair();
 
     //sphere
     // Simple color material
@@ -116,6 +122,28 @@ export default class App extends React.Component {
     this.sphere.position.z = this.position.z + this.aim.z;
     this.renderer.render(this.scene, this.camera);
   };
+
+  createCrosshair() {
+    // crosshair size
+    let x = 0.05,
+      y = 0.05;
+
+    let geometry = new THREE.Geometry();
+    let material = new THREE.LineBasicMaterial({
+      color: 0xaaffaa
+    });
+
+    // crosshair
+    geometry.vertices.push(new THREE.Vector3(0, y, 0));
+    geometry.vertices.push(new THREE.Vector3(0, -y, 0));
+    geometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(x, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(-x, 0, 0));
+
+    this.crosshair = new THREE.Line(geometry, material);
+    this.camera.add(this.crosshair);
+    this.scene.add(this.camera);
+  }
 
   showPosition = () => {
     
