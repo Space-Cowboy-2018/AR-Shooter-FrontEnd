@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
+import { SERVER_URL } from 'react-native-dotenv';
 import {
   Container,
   Header,
@@ -11,7 +12,8 @@ import {
   Button
 } from 'native-base';
 import { Text, View } from 'react-native';
-const host = 'http://172.16.25.211:3030';
+console.log('SERVER_URL', SERVER_URL);
+const host = SERVER_URL;
 
 export default class FloatingLabelExample extends Component {
   constructor() {
