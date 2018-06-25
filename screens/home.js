@@ -12,7 +12,6 @@ import {
   Button
 } from 'native-base';
 import { Text, View } from 'react-native';
-console.log('SERVER_URL', SERVER_URL);
 const host = SERVER_URL;
 
 export default class FloatingLabelExample extends Component {
