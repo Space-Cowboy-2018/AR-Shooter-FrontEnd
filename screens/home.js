@@ -14,7 +14,7 @@ import {
 import { Text, View } from 'react-native';
 const host = SERVER_URL;
 
-export default class FloatingLabelExample extends Component {
+export default class Home extends Component {
   constructor() {
     super();
     this.socket = io(host);
@@ -32,7 +32,7 @@ export default class FloatingLabelExample extends Component {
           <Text style={styles.title}>AR SHOOTER </Text>
           <Form>
             <Item floatingLabel>
-              <Label>Name</Label>
+              <Label>Player Name</Label>
               <Input />
             </Item>
             <Button
