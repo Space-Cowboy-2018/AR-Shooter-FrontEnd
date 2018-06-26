@@ -29,7 +29,7 @@ export default class App extends React.Component {
   componentDidMount() {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
-    ThreeAR.suppressWarnings();
+    ThreeAR.suppressWarnings(true);
     this.props.navigation.state.params.socket.on(SHOT, payload => {
       console.log("shooter's position", payload.x, payload.y);
       console.log('our position', this.position.x, this.position.y);
