@@ -16,6 +16,7 @@ const MAXRANGE = 5;
 const SHOT = 'SHOT';
 const IS_HIT = 'IS_HIT';
 const SHOOT = 'SHOOT';
+const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -34,6 +35,13 @@ export default class App extends React.Component {
       console.log('our position', this.position.x, this.position.y);
       this.props.navigation.state.params.socket.emit(IS_HIT, this.position);
     });
+
+    this.interval = setInterval(() => {
+      this.props.navigation.state.params.socket.emit(UPDATE_PLAYER_MOVEMENT, {
+        position: this.position,
+        aim: this.aim
+      });
+    }, 50);
   }
 
   render() {
