@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import { SERVER_URL } from 'react-native-dotenv';
-import { Content, Form, Item, Input, Label, Button } from 'native-base';
+import { Content, Button, Icon } from 'native-base';
 import { Text, View } from 'react-native';
+
 const host = SERVER_URL;
 
 export default class Home extends Component {
   render() {
     let { navigate } = this.props.navigation;
-    console.log(this.props);
+    let socket = this.props.navigation.state.params.socket;
     return (
       <View style={styles.main}>
+        <Button transparent onPress={() => this.props.navigation.goBack()}>
+          <Icon style={styles.backButton} name="arrow-back" />
+        </Button>
         <Content style={styles.items}>
           <Text style={styles.title}>Lobby</Text>
           <Button
-            onPress={() => navigate('ARScene', { socket: this.props.socket })}
+            onPress={() => navigate('ARScene', { socket: socket })}
             style={{ marginTop: 40 }}
             full
             light>
@@ -42,5 +46,9 @@ const styles = {
   items: {
     marginLeft: 20,
     marginRight: 20
+  },
+  backButton: {
+    marginTop: 10,
+    color: 'black'
   }
 };

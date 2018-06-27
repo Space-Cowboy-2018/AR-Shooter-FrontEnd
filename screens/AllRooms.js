@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Item, Input, Label, Button, Icon, Toast } from 'native-base';
 import { Text, View } from 'react-native';
-import AllRooms from '../components/listRooms';
+import ListRooms from '../components/listRooms';
 const CREATE_ROOM = 'CREATE_ROOM';
 import { SERVER_URL } from 'react-native-dotenv';
 const host = SERVER_URL;
@@ -87,7 +87,7 @@ export default class Rooms extends Component {
           </Form>
         </View>
         <Text style={styles.smallTitle}>All Rooms</Text>
-        <AllRooms
+        <ListRooms
           rooms={this.state.rooms}
           socket={socket}
           navigate={navigate}
