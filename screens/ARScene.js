@@ -1,9 +1,10 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Text, View, Camera } from 'react-native';
 import { AR } from 'expo';
+import CountdownCircle from 'react-native-countdown-circle';
+
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
-
 // Let's also import `expo-graphics`
 // expo-graphics manages the setup/teardown of the gl context/ar session, creates a frame-loop, and observes size/orientation changes.
 // it also provides debug information with `isArCameraStateEnabled`
@@ -22,12 +23,14 @@ const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+
     this.position = new THREE.Vector3();
     this.aim = new THREE.Vector3();
     this.clock = new THREE.Clock();
     this.arrows = [];
     this.state = {
-      hasShot: false
+      hasShot: false,
+      gameDisabled: true
     };
     this.cooldown = this.cooldown.bind(this);
   }
@@ -59,13 +62,17 @@ export default class App extends React.Component {
     // `isArCameraStateEnabled` Will render the camera tracking information on the screen.
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
+    setTimeout(() => {
+      this.setState({ gameDisabled: false });
+    }, 5000);
     return (
       <TouchableOpacity
         style={{
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.hasShot}>
+        disabled={this.state.gameDisabled || this.state.hasShot}>
+        (
         <GraphicsView
           style={{
             flex: 5
@@ -77,7 +84,8 @@ export default class App extends React.Component {
           // isArRunningStateEnabled
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
-        />{' '}
+        />
+        )
       </TouchableOpacity>
     );
   }
@@ -111,7 +119,7 @@ export default class App extends React.Component {
 
     // Combine our geometry and material
     this.sphere = new THREE.Mesh(geometry, material);
-    this.sphere.position.z = -1;
+    this.sphere.position.z = 0;
     this.sphere.position.x = this.camera.position.x;
     this.sphere.position.y = this.camera.position.y;
     // Add the sphere to the scene
@@ -171,7 +179,6 @@ export default class App extends React.Component {
     // this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
-
     var origin = new THREE.Vector3(
       this.position.x,
       this.position.y,
@@ -193,7 +200,17 @@ export default class App extends React.Component {
       position: this.position,
       aim: this.aim
     });
+    console.log('POSITION', this.position);
 
     // this.cooldown();
   };
 }
+
+const styles = {
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center'
+  }
+};
