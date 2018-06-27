@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import { SERVER_URL } from 'react-native-dotenv';
-import {
-  Container,
-  Header,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  Button
-} from 'native-base';
+import { Content, Form, Item, Input, Label, Button } from 'native-base';
 import { Text, View } from 'react-native';
 const host = SERVER_URL;
 
@@ -18,12 +9,12 @@ export default class Home extends Component {
   constructor() {
     super();
     this.socket = io(host);
-    this.handleCreateRooms = this.handleCreateRooms.bind(this);
+    this.handleAddRoomsScreen = this.handleAddRoomsScreen.bind(this);
   }
 
-  handleCreateRooms() {
+  handleAddRoomsScreen() {
     const { navigate } = this.props.navigation;
-    navigate('Rooms', { socket: this.socket });
+    navigate('AllRooms', { socket: this.socket });
   }
   render() {
     return (
@@ -36,11 +27,10 @@ export default class Home extends Component {
               <Input />
             </Item>
             <Button
-              onPress={this.handleCreateRooms}
+              onPress={this.handleAddRoomsScreen}
               style={{ marginTop: 40 }}
               full
-              light
-            >
+              light>
               <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
             </Button>
           </Form>
