@@ -28,7 +28,7 @@ export default class Rooms extends Component {
   createRoom() {
     if (this.state.name) {
       this.props.navigation.state.params.socket.emit(
-        'CREATE_ROOM',
+        CREATE_ROOM,
         this.state.name
       );
       Toast.show({
