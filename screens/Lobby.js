@@ -20,6 +20,7 @@ export default class Lobby extends Component {
     });
   }
   startGame() {
+    console.log(this.props.navigation);
     socket.emit(START_GAME);
   }
   render() {

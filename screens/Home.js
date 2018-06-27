@@ -25,7 +25,7 @@ export default class Home extends Component {
             />
           </View>
           <Form>
-            <Item floatingLabel>
+            <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
               <Input />
             </Item>

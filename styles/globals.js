@@ -1,6 +1,6 @@
 const styles = {
   main: {
-    backgroundColor: '#3D344F',
+    backgroundColor:  '#D5DBE3',
     flex: 1,
     alignContent: 'center'
   },
