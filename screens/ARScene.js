@@ -31,8 +31,6 @@ export default class App extends React.Component {
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
     this.props.navigation.state.params.socket.on(SHOT, payload => {
-      console.log("shooter's position", payload.x, payload.y);
-      console.log('our position', this.position.x, this.position.y);
       this.props.navigation.state.params.socket.emit(IS_HIT, this.position);
     });
 
@@ -180,7 +178,6 @@ export default class App extends React.Component {
 
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
-    // console.log(arrowHelper.rotation.z)
 
     this.props.navigation.state.params.socket.emit(SHOOT, {
       position: this.position,
