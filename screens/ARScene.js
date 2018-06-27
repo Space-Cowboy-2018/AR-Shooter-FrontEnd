@@ -168,7 +168,7 @@ export default class App extends React.Component {
   };
 
   showPosition = () => {
-    this.setState({ hasShot: true });
+    // this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
 
@@ -194,6 +194,6 @@ export default class App extends React.Component {
       aim: this.aim
     });
 
-    this.cooldown();
+    // this.cooldown();
   };
 }
