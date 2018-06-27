@@ -25,6 +25,10 @@ export default class App extends React.Component {
     this.aim = new THREE.Vector3();
     this.clock = new THREE.Clock();
     this.arrows = [];
+    this.state = {
+      hasShot: false
+    };
+    this.cooldown = this.cooldown.bind(this);
   }
   componentDidMount() {
     // Turn off extra warnings
@@ -41,6 +45,12 @@ export default class App extends React.Component {
       });
     }, 50);
   }
+  //Limits the firing Rate of a player to every 500MS by toggling the Touchable Opacity
+  cooldown = () => {
+    setTimeout(() => {
+      this.setState({ hasShot: false });
+    }, 500);
+  };
 
   render() {
     // You need to add the `isArEnabled` & `arTrackingConfiguration` props.
@@ -54,6 +64,7 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
+        disabled={this.state.hasShot}
       >
         <GraphicsView
           style={{
@@ -95,8 +106,6 @@ export default class App extends React.Component {
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
     //sphere
-    // Simple color material
-    // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.SphereGeometry(0.0154);
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
@@ -159,6 +168,7 @@ export default class App extends React.Component {
   };
 
   showPosition = () => {
+    this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
 
@@ -183,5 +193,7 @@ export default class App extends React.Component {
       position: this.position,
       aim: this.aim
     });
+
+    this.cooldown();
   };
 }
