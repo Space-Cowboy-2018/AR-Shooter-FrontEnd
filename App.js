@@ -4,8 +4,8 @@ import { createStackNavigator } from 'react-navigation';
 import Home from './screens/Home';
 import ARScene from './screens/ARScene';
 import GameOver from './screens/GameOver';
-import Rooms from './screens/Rooms';
 import AllRooms from './screens/AllRooms';
+import Lobby from './screens/Lobby';
 import { Font, AppLoading } from 'expo';
 import { Root } from 'native-base';
 
@@ -15,7 +15,7 @@ export default class App extends React.Component {
     this.state = {
       fontLoaded: false
     };
-  } 
+  }
   async componentDidMount() {
     await Font.loadAsync({
       Orbitron: require('./assets/fonts/Orbitron/Orbitron-Regular.ttf'),
@@ -41,9 +41,9 @@ const RootNavigator = createStackNavigator(
   {
     Home: { screen: Home },
     ARScene: { screen: ARScene },
+    AllRooms: { screen: AllRooms },
     GameOver: { screen: GameOver },
-    Rooms: { screen: Rooms },
-    AllRooms: { screen: AllRooms }
+    Lobby: { screen: Lobby }
   },
   {
     headerMode: 'none',

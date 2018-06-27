@@ -6,34 +6,20 @@ import { Text, View } from 'react-native';
 const host = SERVER_URL;
 
 export default class Home extends Component {
-  constructor() {
-    super();
-    this.socket = io(host);
-    this.handleAddRoomsScreen = this.handleAddRoomsScreen.bind(this);
-  }
-
-  handleAddRoomsScreen() {
-    const { navigate } = this.props.navigation;
-    navigate('AllRooms', { socket: this.socket });
-  }
   render() {
+    let { navigate } = this.props.navigation;
+    console.log(this.props);
     return (
       <View style={styles.main}>
         <Content style={styles.items}>
-          <Text style={styles.title}>AR SHOOTER </Text>
-          <Form>
-            <Item floatingLabel>
-              <Label>Player Name</Label>
-              <Input />
-            </Item>
-            <Button
-              onPress={this.handleAddRoomsScreen}
-              style={{ marginTop: 40 }}
-              full
-              light>
-              <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
-            </Button>
-          </Form>
+          <Text style={styles.title}>Lobby</Text>
+          <Button
+            onPress={() => navigate('ARScene', { socket: this.props.socket })}
+            style={{ marginTop: 40 }}
+            full
+            light>
+            <Text style={{ letterSpacing: 2 }}>Start Game</Text>
+          </Button>
         </Content>
       </View>
     );
