@@ -10,14 +10,14 @@ import {
   Thumbnail,
   Text
 } from 'native-base';
-
+import styles from '../styles/globals';
 const ListRooms = props => {
   let rooms = props.rooms;
 
   rooms = Object.keys(rooms);
   return (
     <Content style={{ marginLeft: 20, marginRight: 20 }}>
-      <Container style={{ backgroundColor: '#3D464E' }}>
+      <Container style={styles.main}>
         <List style={{ marginTop: 0 }}>
           {rooms &&
             rooms.map(room => {
@@ -30,7 +30,7 @@ const ListRooms = props => {
                     <Thumbnail
                       source={{
                         uri:
-                          'http://freedesignfile.com/upload/2017/08/alien-icon-vector.png'
+                          'https://d30y9cdsu7xlg0.cloudfront.net/png/434333-200.png'
                       }}
                     />
                   </Left>
@@ -53,15 +53,3 @@ const ListRooms = props => {
 };
 
 export default ListRooms;
-
-const styles = {
-  backButton: {
-    color: 'black'
-  },
-  title: {
-    fontFamily: 'Orbitron',
-    fontSize: 30,
-    textAlign: 'center',
-    letterSpacing: 2
-  }
-};

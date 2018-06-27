@@ -4,6 +4,9 @@ import { Text, View } from 'react-native';
 import ListRooms from '../components/listRooms';
 const CREATE_ROOM = 'CREATE_ROOM';
 import axios from 'axios';
+import backButton from '../styles/backButton';
+import styles from '../styles/globals';
+import smallTitle from '../styles/smallTitle';
 import socket, { host } from '../socket';
 
 export default class Rooms extends Component {
@@ -42,13 +45,11 @@ export default class Rooms extends Component {
   }
 
   createRoom() {
+    let navigate = this.props.navigation.navigate;
+
     if (this.state.name) {
       socket.emit(CREATE_ROOM, this.state.name);
-      Toast.show({
-        text: 'Room Created!',
-        position: 'top',
-        buttonText: 'Okay'
-      });
+      navigate('Lobby');
     } else {
       Toast.show({
         text: 'Please Enter Room Name!',
@@ -64,10 +65,10 @@ export default class Rooms extends Component {
     return (
       <View style={styles.main}>
         <Button transparent onPress={() => this.props.navigation.goBack()}>
-          <Icon style={styles.backButton} name="arrow-back" />
+          <Icon style={backButton} name="arrow-back" />
         </Button>
         <View style={styles.items}>
-          <Text style={styles.title}>LOBBY </Text>
+          <Text style={styles.title}>AR SHOOTER</Text>
           <Form>
             <Item floatingLabel>
               <Label>Name</Label>
@@ -82,38 +83,9 @@ export default class Rooms extends Component {
             </Button>
           </Form>
         </View>
-        <Text style={styles.smallTitle}>All Rooms</Text>
+        <Text style={smallTitle}>All Rooms</Text>
         <ListRooms rooms={this.state.rooms} navigate={navigate} />
       </View>
     );
   }
 }
-
-const styles = {
-  main: {
-    backgroundColor: '#3D464E',
-    flex: 1,
-    justifyContent: 'space-between'
-  },
-  title: {
-    fontFamily: 'Orbitron',
-    fontSize: 30,
-    textAlign: 'center',
-    marginTop: 0,
-    letterSpacing: 2
-  },
-  smallTitle: {
-    fontFamily: 'Orbitron',
-    fontSize: 25,
-    marginBottom: 0,
-    textAlign: 'center',
-    letterSpacing: 2
-  },
-  items: {
-    margin: 30
-  },
-  backButton: {
-    marginTop: 10,
-    color: 'black'
-  }
-};

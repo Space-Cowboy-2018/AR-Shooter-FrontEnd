@@ -200,7 +200,6 @@ export default class App extends React.Component {
       position: this.position,
       aim: this.aim
     });
-    console.log('POSITION', this.position);
 
     // this.cooldown();
   };

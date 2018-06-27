@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-
+import styles from '../styles/globals';
 import { Content, Form, Item, Input, Label, Button } from 'native-base';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 
 export default class Home extends Component {
   constructor() {
@@ -16,10 +16,16 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.main}>
-        <Content style={styles.items}>
-          <Text style={styles.title}>AR SHOOTER </Text>
+        <Text style={styles.title}>AR SHOOTER </Text>
+        <View style={styles.items}>
+          <View style={{ alignSelf: 'center', margin: 0 }}>
+            <Image
+              style={styles.image}
+              source={require('../assets/icon.png')}
+            />
+          </View>
           <Form>
-            <Item floatingLabel>
+            <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
               <Input />
             </Item>
@@ -31,27 +37,8 @@ export default class Home extends Component {
               <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
             </Button>
           </Form>
-        </Content>
+        </View>
       </View>
     );
   }
 }
-
-const styles = {
-  main: {
-    backgroundColor: '#3D464E',
-    flex: 1,
-    justifyContent: 'space-between'
-  },
-  title: {
-    fontFamily: 'Orbitron',
-    fontSize: 30,
-    textAlign: 'center',
-    marginTop: 60,
-    letterSpacing: 2
-  },
-  items: {
-    marginLeft: 20,
-    marginRight: 20
-  }
-};
