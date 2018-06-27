@@ -11,6 +11,8 @@ import {
 } from 'native-base';
 import { Text, View } from 'react-native';
 
+const CREATE_ROOM = 'CREATE_ROOM';
+
 export default class Rooms extends Component {
   constructor() {
     super();
