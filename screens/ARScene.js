@@ -95,8 +95,6 @@ export default class App extends React.Component {
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
     //sphere
-    // Simple color material
-    // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.SphereGeometry(0.0154);
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
