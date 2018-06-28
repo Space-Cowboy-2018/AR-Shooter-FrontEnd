@@ -11,45 +11,80 @@ import {
   Text
 } from 'native-base';
 import styles from '../styles/globals';
-const ListRooms = props => {
-  let rooms = props.rooms;
+import axios from 'axios';
+const JOIN_ROOM = 'JOIN_ROOM';
+import socket, { host } from '../socket';
 
-  rooms = Object.keys(rooms);
-  return (
-    <Content style={{ marginLeft: 20, marginRight: 20 }}>
-      <Container style={styles.main}>
-        <List style={{ marginTop: 0 }}>
-          {rooms &&
-            rooms.map(room => {
-              return (
-                <ListItem
-                  avatar
-                  key={room}
-                  onPress={() => props.navigate('Lobby')}>
-                  <Left>
-                    <Thumbnail
-                      source={{
-                        uri:
-                          'https://d30y9cdsu7xlg0.cloudfront.net/png/434333-200.png'
-                      }}
-                    />
-                  </Left>
-                  <Body>
-                    <Text>{room}</Text>
-                    <Text note>Stuff goes here.</Text>
-                  </Body>
-                  <Right>
-                    <Text note>
-                      {props.rooms[room].length} player(s) active.
-                    </Text>
-                  </Right>
-                </ListItem>
-              );
-            })}
-        </List>
-      </Container>
-    </Content>
-  );
-};
+class ListRooms extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      rooms: {}
+    };
+    this.getRooms = this.getRooms.bind(this);
+    this.handleJoinRoom = this.handleJoinRoom.bind(this);
+    this.receivingRooms = this.receivingRooms.bind(this);
+  }
 
+  componentDidMount() {
+    this.getRooms();
+    socket.on('NEW_ROOM', rooms => {
+      this.receivingRooms(rooms);
+    });
+  }
+  receivingRooms(payload) {
+    this.setState({ rooms: payload });
+  }
+  getRooms() {
+    axios
+      .get(`${host}/rooms`)
+      .then(res => res.data)
+      .then(roomsFound => this.setState({ rooms: roomsFound }))
+      .catch(err => console.log(err));
+  }
+  handleJoinRoom(room) {
+    let navigate = this.props.navigate;
+    socket.emit(JOIN_ROOM, room);
+    navigate('Lobby');
+  }
+
+  render() {
+    const roomsArr = Object.keys(this.state.rooms);
+    return (
+      <Content style={{ marginLeft: 20, marginRight: 20 }}>
+        <Container style={styles.main}>
+          <List style={{ marginTop: 0 }}>
+            {roomsArr &&
+              roomsArr.map(room => {
+                return (
+                  <ListItem
+                    avatar
+                    key={room}
+                    onPress={() => this.handleJoinRoom(room)}>
+                    <Left>
+                      <Thumbnail
+                        source={{
+                          uri:
+                            'https://d30y9cdsu7xlg0.cloudfront.net/png/434333-200.png'
+                        }}
+                      />
+                    </Left>
+                    <Body>
+                      <Text>{room}</Text>
+                      <Text note>Stuff goes here.</Text>
+                    </Body>
+                    <Right>
+                      <Text note>
+                        {this.state.rooms[room].length} player(s) active.
+                      </Text>
+                    </Right>
+                  </ListItem>
+                );
+              })}
+          </List>
+        </Container>
+      </Content>
+    );
+  }
+}
 export default ListRooms;
