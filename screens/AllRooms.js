@@ -22,8 +22,8 @@ export default class Rooms extends Component {
     let navigate = this.props.navigation.navigate;
     if (this.state.name) {
       socket.emit(CREATE_ROOM, this.state.name);
-      this.setState({ name: '' });
-      navigate('Lobby');
+
+      navigate('Lobby', { room: this.state.name });
     } else {
       Toast.show({
         text: 'Please Enter Room Name!',
@@ -52,7 +52,8 @@ export default class Rooms extends Component {
               onPress={this.createRoom}
               style={{ marginTop: 40 }}
               full
-              light>
+              light
+            >
               <Text style={{ letterSpacing: 2 }}>Create a Room</Text>
             </Button>
           </Form>

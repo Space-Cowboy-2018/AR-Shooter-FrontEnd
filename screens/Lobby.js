@@ -6,12 +6,15 @@ import styles from '../styles/globals';
 
 const START_GAME = 'START_GAME';
 const GAME_STARTED = 'GAME_STARTED';
+const LEAVE_ROOM = 'LEAVE_ROOM';
 
 export default class Lobby extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.startGame = this.startGame.bind(this);
+    this.handleLeaveRoom = this.handleLeaveRoom.bind(this);
   }
+
   componentDidMount() {
     let { navigate } = this.props.navigation;
     socket.on(GAME_STARTED, () => {
@@ -19,13 +22,18 @@ export default class Lobby extends Component {
     });
   }
   startGame() {
-    console.log(this.props.navigation);
     socket.emit(START_GAME);
+  }
+
+  handleLeaveRoom() {
+    let room = this.props.navigation.state.params.room;
+    socket.emit(LEAVE_ROOM, room);
+    this.props.navigation.navigate('AllRooms');
   }
   render() {
     return (
       <View style={styles.main}>
-        <Button transparent onPress={() => this.props.navigation.goBack()}>
+        <Button transparent onPress={this.handleLeaveRoom}>
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <Content style={styles.items}>
