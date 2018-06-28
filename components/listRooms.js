@@ -45,7 +45,7 @@ class ListRooms extends React.Component {
   handleJoinRoom(room) {
     let navigate = this.props.navigate;
     socket.emit(JOIN_ROOM, room);
-    navigate('Lobby');
+    navigate('Lobby', { room });
   }
 
   render() {
@@ -60,7 +60,8 @@ class ListRooms extends React.Component {
                   <ListItem
                     avatar
                     key={room}
-                    onPress={() => this.handleJoinRoom(room)}>
+                    onPress={() => this.handleJoinRoom(room)}
+                  >
                     <Left>
                       <Thumbnail
                         source={{
