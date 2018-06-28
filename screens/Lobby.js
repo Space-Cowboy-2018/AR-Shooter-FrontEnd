@@ -31,8 +31,6 @@ export default class Lobby extends Component {
     this.props.navigation.navigate('AllRooms');
   }
   render() {
-    console.log(this.props, 'FROM LOBBY');
-    console.log(this.state);
     return (
       <View style={styles.main}>
         <Button transparent onPress={this.handleLeaveRoom}>
