@@ -88,7 +88,13 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
-        <Progress.Bar progress={this.state.health / 10} color="green" />
+        <Progress.Bar
+          progress={this.state.health / 10}
+          color="green"
+          borderWidth={0}
+          width={null}
+          height={50}
+        />
         )
       </TouchableOpacity>
     );
