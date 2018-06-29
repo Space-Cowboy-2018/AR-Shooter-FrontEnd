@@ -87,7 +87,7 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
-        {/*<View style={{flex: 1, backgroundColor: 'red'}}  />*/}
+        <View style={{flex: 1, backgroundColor: 'red', width: this.state.health}}  />
         )
       </TouchableOpacity>
     );
