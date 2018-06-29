@@ -31,14 +31,17 @@ export default class App extends React.Component {
       hasShot: false,
       gameDisabled: true
     };
+    this.health = 10;
     this.cooldown = this.cooldown.bind(this);
   }
   componentDidMount() {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
-    socket.on(SHOT, payload => {
-      socket.emit(IS_HIT, this.position);
+    socket.on(SHOT, () => {
+      console.log('HEALTH BEFORE>>>>', this.health);
+      this.health--;
+      console.log('HEALTH NOW>>>', this.health);
     });
 
     this.interval = setInterval(() => {
