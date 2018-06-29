@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { AR } from 'expo';
 
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
@@ -29,9 +29,9 @@ export default class App extends React.Component {
     this.arrows = [];
     this.state = {
       hasShot: false,
-      gameDisabled: true
+      gameDisabled: true,
+      health: 10
     };
-    this.health = 10;
     this.cooldown = this.cooldown.bind(this);
   }
   componentDidMount() {
@@ -40,7 +40,7 @@ export default class App extends React.Component {
     ThreeAR.suppressWarnings(true);
     socket.on(SHOT, () => {
       console.log('HEALTH BEFORE>>>>', this.health);
-      this.health--;
+      this.setState(prevState => ({health: prevState.health - 1}))
       console.log('HEALTH NOW>>>', this.health);
     });
 
@@ -77,7 +77,7 @@ export default class App extends React.Component {
         (
         <GraphicsView
           style={{
-            flex: 5
+            flex: 10
           }}
           onContextCreate={this.onContextCreate}
           onRender={this.onRender}
@@ -87,6 +87,7 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
+        {/*<View style={{flex: 1, backgroundColor: 'red'}}  />*/}
         )
       </TouchableOpacity>
     );
