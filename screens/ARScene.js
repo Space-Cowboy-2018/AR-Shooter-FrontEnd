@@ -1,7 +1,7 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { AR } from 'expo';
-
+import * as Progress from 'react-native-progress';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 // Let's also import `expo-graphics`
@@ -29,7 +29,8 @@ export default class App extends React.Component {
     this.arrows = [];
     this.state = {
       hasShot: false,
-      gameDisabled: true
+      gameDisabled: true,
+      health: 10
     };
     this.cooldown = this.cooldown.bind(this);
   }
@@ -37,8 +38,10 @@ export default class App extends React.Component {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
-    socket.on(SHOT, payload => {
-      socket.emit(IS_HIT, this.position);
+    socket.on(SHOT, () => {
+      console.log('HEALTH BEFORE>>>>', this.state.health);
+      this.setState(prevState => ({ health: prevState.health - 1 }));
+      console.log('HEALTH NOW>>>', this.state.health);
     });
 
     this.interval = setInterval(() => {
@@ -70,11 +73,12 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}>
+        disabled={this.state.gameDisabled || this.state.hasShot}
+      >
         (
         <GraphicsView
           style={{
-            flex: 5
+            flex: 10
           }}
           onContextCreate={this.onContextCreate}
           onRender={this.onRender}
@@ -83,6 +87,13 @@ export default class App extends React.Component {
           // isArRunningStateEnabled
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
+        />
+        <Progress.Bar
+          progress={this.state.health / 10}
+          color="green"
+          borderWidth={0}
+          width={null}
+          height={50}
         />
         )
       </TouchableOpacity>
