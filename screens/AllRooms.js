@@ -22,7 +22,7 @@ export default class Rooms extends Component {
     let navigate = this.props.navigation.navigate;
     if (this.state.name) {
       socket.emit(CREATE_ROOM, this.state.name);
-
+      this.setState({ name: '' });
       navigate('Lobby', { room: this.state.name });
     } else {
       Toast.show({
@@ -42,19 +42,19 @@ export default class Rooms extends Component {
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <View style={styles.items}>
-          <Text style={styles.title}>AR SHOOTER</Text>
+          <Text style={styles.title}>SPACE COWBOY</Text>
           <Form>
             <Item floatingLabel>
-              <Label>Name</Label>
+              <Label>Room Name</Label>
               <Input value={this.state.name} onChangeText={this.handleChange} />
             </Item>
             <Button
+              bordered
+              dark
               onPress={this.createRoom}
               style={{ marginTop: 40 }}
-              full
-              light
-            >
-              <Text style={{ letterSpacing: 2 }}>Create a Room</Text>
+              full>
+              <Text style={{ letterSpacing: 2 }}>Create Room</Text>
             </Button>
           </Form>
         </View>
