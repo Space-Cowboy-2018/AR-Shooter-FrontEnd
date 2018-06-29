@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { AR } from 'expo';
-
+import * as Progress from 'react-native-progress';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 // Let's also import `expo-graphics`
@@ -39,9 +39,9 @@ export default class App extends React.Component {
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
     socket.on(SHOT, () => {
-      console.log('HEALTH BEFORE>>>>', this.health);
-      this.setState(prevState => ({health: prevState.health - 1}))
-      console.log('HEALTH NOW>>>', this.health);
+      console.log('HEALTH BEFORE>>>>', this.state.health);
+      this.setState(prevState => ({ health: prevState.health - 1 }));
+      console.log('HEALTH NOW>>>', this.state.health);
     });
 
     this.interval = setInterval(() => {
@@ -73,7 +73,8 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}>
+        disabled={this.state.gameDisabled || this.state.hasShot}
+      >
         (
         <GraphicsView
           style={{
@@ -87,7 +88,7 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
-        <View style={{flex: 1, backgroundColor: 'red', width: this.state.health}}  />
+        <Progress.Bar progress={this.state.health / 10} color="green" />
         )
       </TouchableOpacity>
     );
