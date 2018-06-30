@@ -37,7 +37,7 @@ export default class App extends React.Component {
   componentDidMount() {
     // Turn off extra warnings
     const { navigate } = this.props.navigation;
-    THREE.suppressExpoWarnings(true);
+    THREE.suppressExpoWarnings();
     ThreeAR.suppressWarnings(true);
     socket.on(SHOT, () => {
       Vibration.vibrate(1000);
