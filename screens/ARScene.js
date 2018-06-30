@@ -12,6 +12,7 @@ import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
 
+
 const MAXRANGE = 5;
 
 // socket events
@@ -37,7 +38,7 @@ export default class App extends React.Component {
   componentDidMount() {
     // Turn off extra warnings
     const { navigate } = this.props.navigation;
-    THREE.suppressExpoWarnings();
+    THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
     socket.on(SHOT, () => {
       Vibration.vibrate(1000);
