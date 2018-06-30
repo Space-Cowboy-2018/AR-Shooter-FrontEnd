@@ -18,6 +18,7 @@ const MAXRANGE = 5;
 const SHOT = 'SHOT';
 const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
+const YOU_HIT = 'YOU_HIT';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -52,6 +53,13 @@ export default class App extends React.Component {
       }
       this.setState(prevState => ({ health: prevState.health - 1 }));
     });
+
+    socket.on(YOU_HIT, () => {
+      this.sphere.material.color.setHex(0x0000ff);
+      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500)
+      
+    });
+
     socket.on('disconnect', () => {
       Toast.show({
         text:
@@ -224,11 +232,13 @@ export default class App extends React.Component {
 
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
+    
 
     socket.emit(SHOOT, {
       position: this.position,
       aim: this.aim
     });
+    
 
     // this.cooldown();
   };
