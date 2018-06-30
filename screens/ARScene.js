@@ -38,9 +38,9 @@ export default class App extends React.Component {
   }
   componentDidMount() {
     // Turn off extra warnings
-
-    THREE.suppressExpoWarnings(true);
-    ThreeAR.suppressWarnings(true);
+    this.logs = console.log;
+    console.log = () => {}
+    THREE.suppressExpoWarnings();
 
     setTimeout(() => {
       this.setState({ gameDisabled: false });
@@ -58,7 +58,7 @@ export default class App extends React.Component {
     socket.on(YOU_HIT, () => {
       this.sphere.material.color.setHex(0x0000ff);
       setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500)
-      
+
     });
 
     socket.on('disconnect', () => {
@@ -79,6 +79,7 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     socket.off(SHOT);
+    console.log = this.logs // assigns console.log back to itself
   }
 
   //Limits the firing Rate of a player to every 500MS by toggling the Touchable Opacity
@@ -233,13 +234,13 @@ export default class App extends React.Component {
 
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
-    
+
 
     socket.emit(SHOOT, {
       position: this.position,
       aim: this.aim
     });
-    
+
 
     // this.cooldown();
   };
