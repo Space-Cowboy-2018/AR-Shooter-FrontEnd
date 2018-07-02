@@ -2,14 +2,16 @@ const styles = {
   main: {
     backgroundColor: '#27257A',
     flex: 1,
-    alignContent: 'center'
+    alignContent: 'center',
+    justifyContent: 'space-around'
   },
   mainTitle: {
     marginTop: 80,
     fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
-    letterSpacing: 2
+    letterSpacing: 2,
+    color: 'white'
   },
   title: {
     fontFamily: 'Orbitron',
@@ -27,7 +29,8 @@ const styles = {
   },
   ButtonContainer: {
     marginLeft: 30,
-    marginRight: 30
+    marginRight: 30,
+    marginBottom: 30
   }
 };
 

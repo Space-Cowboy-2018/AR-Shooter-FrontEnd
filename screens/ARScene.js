@@ -19,6 +19,7 @@ const SHOT = 'SHOT';
 const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
 const YOU_HIT = 'YOU_HIT';
+const WINNER = 'WINNER';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -41,13 +42,15 @@ export default class App extends React.Component {
     console.log = () => {};
     THREE.suppressExpoWarnings();
 
+    const { navigate } = this.props.navigation;
+
     setTimeout(() => {
       this.setState({ gameDisabled: false });
     }, 5000);
 
     socket.on(SHOT, () => {
-      const { navigate } = this.props.navigation;
       Vibration.vibrate(1000);
+
       if (this.state.health === 1) {
         navigate('GameOver');
       }
@@ -58,6 +61,8 @@ export default class App extends React.Component {
       this.sphere.material.color.setHex(0x0000ff);
       setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500);
     });
+
+    socket.on(WINNER, () => navigate('Winner'));
 
     socket.on('disconnect', () => {
       Toast.show({
@@ -102,8 +107,7 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}
-      >
+        disabled={this.state.gameDisabled || this.state.hasShot}>
         (
         <GraphicsView
           style={{
