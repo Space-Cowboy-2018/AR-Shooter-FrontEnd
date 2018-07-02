@@ -34,6 +34,7 @@ export default class Lobby extends Component {
     });
   }
 
+  //CG: but whyy?!
   componentWillUnmount() {
   }
   startGame() {

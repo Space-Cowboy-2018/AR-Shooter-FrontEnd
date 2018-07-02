@@ -15,6 +15,7 @@ import socket from '../socket';
 const MAXRANGE = 5;
 
 // socket events
+//CG Great you did this but maybe want to consider game/socket handling in separate game manager.
 const SHOT = 'SHOT';
 const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
@@ -47,7 +48,7 @@ export default class App extends React.Component {
     setTimeout(() => {
       this.setState({ gameDisabled: false });
     }, 5000);
-
+    //CG: SHOT and YOU_HIT are mildly confusing.
     socket.on(SHOT, () => {
       Vibration.vibrate(1000);
 
@@ -98,7 +99,9 @@ export default class App extends React.Component {
     // `isArCameraStateEnabled` Will render the camera tracking information on the screen.
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
+    // CG: Get rid of default comments. 
     const { navigate } = this.props.navigation;
+    //I can see not using <= being a bug
     if (this.state.health === 0) {
       navigate('GameOver');
     }
@@ -123,6 +126,7 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
+        {/* Render ternary inside color */}
         {this.state.health > 3 ? (
           <Progress.Bar
             progress={this.state.health / 10}
@@ -208,6 +212,7 @@ export default class App extends React.Component {
     this.sphere.position.y = this.position.y + this.aim.y;
     this.sphere.position.z = this.position.z + this.aim.z;
     let index;
+    //CG: You guys are better than this.
     this.arrows.forEach((arrow, i) => {
       // arrow.position.add(arrow.velocity)
       arrow.position.x += arrow.velocity.x * 0.25;
@@ -231,6 +236,7 @@ export default class App extends React.Component {
   };
 
   showPosition = () => {
+    //CG: REMOVE DELETED CODE
     // this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();

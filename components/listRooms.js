@@ -44,6 +44,7 @@ class ListRooms extends React.Component {
       .catch(err => console.log(err));
   }
   handleJoinRoom(room) {
+    //CG: Standardize let/const and destructuring. 
     const playerName = this.props.playerName;
     let navigate = this.props.navigate;
     socket.emit(JOIN_ROOM, room, playerName);

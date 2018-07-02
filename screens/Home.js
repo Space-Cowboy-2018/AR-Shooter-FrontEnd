@@ -16,6 +16,7 @@ export default class Home extends Component {
 
   handleAddRoomsScreen() {
     const { navigate } = this.props.navigation;
+    //CG: This looks multiline and could cause problems down the line.
     if (this.state.playerName)
       navigate('AllRooms', { playerName: this.state.playerName });
     else
@@ -32,6 +33,7 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.main}>
+      {/* Leave notes for placeholder code. */}
         {/*<BgAudio options={audio_options} />*/}
         <Text style={styles.mainTitle}>SPACE COWBOY </Text>
         <View style={styles.items}>

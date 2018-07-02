@@ -38,6 +38,7 @@ export default class Rooms extends Component {
   handleChange(text) {
     this.setState({ name: text });
   }
+  //CG: Maybe don't look for these variables twice vvv
   render() {
     let navigate = this.props.navigation.navigate;
     const playerName = this.props.navigation.state.params.playerName;
