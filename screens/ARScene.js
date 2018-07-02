@@ -12,7 +12,6 @@ import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
 
-
 const MAXRANGE = 5;
 
 // socket events
@@ -39,7 +38,7 @@ export default class App extends React.Component {
   componentDidMount() {
     // Turn off extra warnings
     this.logs = console.log;
-    console.log = () => {}
+    console.log = () => {};
     THREE.suppressExpoWarnings();
 
     setTimeout(() => {
@@ -57,8 +56,7 @@ export default class App extends React.Component {
 
     socket.on(YOU_HIT, () => {
       this.sphere.material.color.setHex(0x0000ff);
-      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500)
-
+      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500);
     });
 
     socket.on('disconnect', () => {
@@ -79,7 +77,8 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     socket.off(SHOT);
-    console.log = this.logs // assigns console.log back to itself
+    socket.off(UPDATE_PLAYER_MOVEMENT);
+    console.log = this.logs; // assigns console.log back to itself
   }
 
   //Limits the firing Rate of a player to every 500MS by toggling the Touchable Opacity
@@ -103,7 +102,8 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}>
+        disabled={this.state.gameDisabled || this.state.hasShot}
+      >
         (
         <GraphicsView
           style={{
@@ -235,12 +235,10 @@ export default class App extends React.Component {
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
 
-
     socket.emit(SHOOT, {
       position: this.position,
       aim: this.aim
     });
-
 
     // this.cooldown();
   };
