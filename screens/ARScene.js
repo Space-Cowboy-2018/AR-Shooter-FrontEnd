@@ -13,7 +13,8 @@ import { View as GraphicsView } from 'expo-graphics';
 import socket from '../socket';
 import { loadSounds, playSound, prepareSound } from '../utils/sound';
 import heartPosition from '../utils/heartPosition';
-import laser from '../assets/audio/laser.mp3';
+import createLaser from '../utils/createLaser';
+import laserSound from '../assets/audio/laser.mp3';
 
 import styles from '../styles/globals';
 const MAXRANGE = 5;
@@ -33,7 +34,7 @@ export default class App extends React.Component {
     this.position = new THREE.Vector3();
     this.aim = new THREE.Vector3();
     this.clock = new THREE.Clock();
-    this.arrows = [];
+    this.lasers = [];
     this.state = {
       hasShot: false,
       gameDisabled: true,
@@ -43,7 +44,7 @@ export default class App extends React.Component {
     this.cooldown = this.cooldown.bind(this);
     prepareSound();
     loadSounds({
-      shoot: laser
+      shoot: laserSound
     });
   }
   componentDidMount() {
@@ -67,7 +68,9 @@ export default class App extends React.Component {
     });
 
     socket.on(LASER_SHOT, ({position, aim}) => {
-      this.createLaser(position, aim);
+      let laser = createLaser(position, aim);
+      this.lasers.push(laser);
+      this.scene.add(laser);
     })
 
     socket.on(YOU_HIT, () => {
@@ -243,24 +246,24 @@ export default class App extends React.Component {
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
     let index;
-    this.arrows.forEach((arrow, i) => {
-      // arrow.position.add(arrow.velocity)
-      arrow.position.x += arrow.velocity.x * 0.25;
-      arrow.position.y += arrow.velocity.y * 0.25;
-      arrow.position.z += arrow.velocity.z * 0.25;
+    this.lasers.forEach((laser, i) => {
+      // laser.position.add(laser.velocity)
+      laser.position.x += laser.velocity.x * 0.25;
+      laser.position.y += laser.velocity.y * 0.25;
+      laser.position.z += laser.velocity.z * 0.25;
 
       if (
-        Math.abs(arrow.position.x) >= MAXRANGE ||
-        Math.abs(arrow.position.y) >= MAXRANGE ||
-        Math.abs(arrow.position.z) >= MAXRANGE
+        Math.abs(laser.position.x) >= MAXRANGE ||
+        Math.abs(laser.position.y) >= MAXRANGE ||
+        Math.abs(laser.position.z) >= MAXRANGE
       ) {
         index = i;
       }
     });
 
     if (index !== undefined) {
-      this.scene.remove(this.arrows[index]);
-      this.arrows.splice(index, 1);
+      this.scene.remove(this.lasers[index]);
+      this.lasers.splice(index, 1);
     }
 
     this.heart.rotation.y += Math.PI / 32;
@@ -271,7 +274,9 @@ export default class App extends React.Component {
     await playSound('shoot');
     this.setState({ hasShot: true });
 
-    this.createLaser(this.position, this.aim);
+    const laser =createLaser(this.position, this.aim);
+    this.lasers.push(laser);
+    this.scene.add(laser);
 
     socket.emit(SHOOT, {
       position: this.position,
@@ -280,25 +285,4 @@ export default class App extends React.Component {
 
     this.cooldown();
   };
-
-  createLaser(position, aim) {
-    var dir = new THREE.Vector3(aim.x, aim.y, aim.z);
-    dir.normalize();
-    var origin = new THREE.Vector3(
-      position.x,
-      position.y,
-      position.z
-    );
-    var length = 0.5;
-    var hex = 0x00ff00;
-    var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 1, 0.05);
-    arrowHelper.velocity = new THREE.Vector3(
-      aim.x,
-      aim.y,
-      aim.z
-    );
-
-    this.arrows.push(arrowHelper);
-    this.scene.add(arrowHelper);
-  }
 }
