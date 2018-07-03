@@ -11,7 +11,7 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
-import { loadSounds, playSound, prepareSound } from '../utils/sound'
+import { loadSounds, playSound, prepareSound } from '../utils/sound';
 import laser from '../assets/audio/laser.mp3';
 
 import styles from '../styles/globals';
@@ -35,12 +35,13 @@ export default class App extends React.Component {
     this.state = {
       hasShot: false,
       gameDisabled: true,
-      health: 10
+      health: 10,
+      crosshair: 150
     };
     this.cooldown = this.cooldown.bind(this);
     prepareSound();
     loadSounds({
-      hit: laser
+      shoot: laser
     });
   }
   componentDidMount() {
@@ -65,6 +66,8 @@ export default class App extends React.Component {
 
     socket.on(YOU_HIT, () => {
       //do something with image, maybe zoom in for a second?
+      this.setState({ crosshair: 200 });
+      setTimeout(() => this.setState({ crosshair: 150 }), 200);
     });
 
     socket.on(WINNER, () => {
@@ -109,7 +112,8 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}>
+        disabled={this.state.gameDisabled || this.state.hasShot}
+      >
         {this.state.health > 3 ? (
           <View style={styles.topOverlay}>
             <Progress.Bar
@@ -145,7 +149,10 @@ export default class App extends React.Component {
 
         <View style={styles.centerOverlay}>
           <Image
-            style={{ width: 150, height: 150 }}
+            style={{
+              width: this.state.crosshair,
+              height: this.state.crosshair
+            }}
             source={require('../assets/images/futuristic_crosshair.png')}
           />
         </View>
@@ -225,7 +232,7 @@ export default class App extends React.Component {
   };
 
   showPosition = async () => {
-    await playSound('hit')
+    await playSound('shoot');
     this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
@@ -248,8 +255,8 @@ export default class App extends React.Component {
 
     socket.emit(SHOOT, {
       position: this.position,
-       aim: this.aim
-     });
+      aim: this.aim
+    });
 
     this.cooldown();
   };
