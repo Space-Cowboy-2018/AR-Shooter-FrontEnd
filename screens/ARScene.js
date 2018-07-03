@@ -221,16 +221,10 @@ export default class App extends React.Component {
     this.heart.rotation.set(0, 0, Math.PI);
     this.scene.add(this.heart);
 
-    //=======================================================================
-
-    // Setup a light so we can see the sphere color
-    // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
   };
 
-  // When the phone rotates, or the view changes size, this method will be called.
   onResize = ({ x, y, scale, width, height }) => {
-    // Let's stop the function if we haven't setup our scene yet
     if (!this.renderer) {
       return;
     }
@@ -240,9 +234,7 @@ export default class App extends React.Component {
     this.renderer.setSize(width, height);
   };
 
-  // Called every frame.
   onRender = async () => {
-    // Finally render the scene with the AR Camera
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
     let index;
