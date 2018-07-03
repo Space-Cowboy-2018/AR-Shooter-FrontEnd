@@ -12,7 +12,7 @@ import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
 import { loadSounds, playSound, prepareSound } from '../utils/sound';
-import heartPosition from '../utils/heartPosition';
+import {heartGrabbed, howMuchHealth} from '../utils/heartPosition';
 import createLaser from '../utils/createLaser';
 import laserSound from '../assets/audio/laser.mp3';
 
@@ -25,6 +25,8 @@ const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
 const YOU_HIT = 'YOU_HIT';
 const WINNER = 'WINNER';
+const HEART_PICKED_UP = 'HEART_PICKED_UP';
+const ERASE_HEART = 'ERASE_HEART';
 const LASER_SHOT = 'LASER_SHOT';
 
 export default class App extends React.Component {
@@ -39,7 +41,8 @@ export default class App extends React.Component {
       hasShot: false,
       gameDisabled: true,
       health: 10,
-      crosshair: 150
+      crosshair: 150,
+      heart: true
     };
     this.cooldown = this.cooldown.bind(this);
     prepareSound();
@@ -54,7 +57,6 @@ export default class App extends React.Component {
     THREE.suppressExpoWarnings();
 
     const { navigate } = this.props.navigation;
-
     setTimeout(() => {
       this.setState({ gameDisabled: false });
     }, 5000);
@@ -79,6 +81,11 @@ export default class App extends React.Component {
       setTimeout(() => this.setState({ crosshair: 150 }), 200);
     });
 
+    socket.once(ERASE_HEART, () => {
+      this.scene.remove(this.heart);
+      this.setState({heart: false})
+    });
+
     socket.on(WINNER, () => {
       navigate('Winner', { room: this.props.navigation.state.params.room });
     });
@@ -91,7 +98,9 @@ export default class App extends React.Component {
         position: 'top'
       });
     });
+
     this.interval = setInterval(() => {
+      this.heartHandler()
       socket.emit(UPDATE_PLAYER_MOVEMENT, {
         position: this.position,
         aim: this.aim
@@ -217,7 +226,7 @@ export default class App extends React.Component {
     const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
     this.heart = new THREE.Mesh(heartGeometry, heartMaterial);
     this.heart.scale.set(0.005, 0.005, 0.005);
-    this.heart.position.set(1, 0, -1);
+    this.heart.position.set(2, 0, -2);
     this.heart.rotation.set(0, 0, Math.PI);
     this.scene.add(this.heart);
 
@@ -260,13 +269,21 @@ export default class App extends React.Component {
 
     this.heart.rotation.y += Math.PI / 32;
     this.renderer.render(this.scene, this.camera);
+
+  };
+  heartHandler = () => {
+    if (this.state.heart && heartGrabbed(this.position, this.heart.position)) {
+      this.logs('OUR HEALTH', this.state.health)
+      this.setState(prevState => ({health: howMuchHealth(prevState.health)}))
+      socket.emit(HEART_PICKED_UP);
+    }
   };
 
   showPosition = async () => {
     await playSound('shoot');
     this.setState({ hasShot: true });
 
-    const laser =createLaser(this.position, this.aim);
+    const laser = createLaser(this.position, this.aim);
     this.lasers.push(laser);
     this.scene.add(laser);
 
