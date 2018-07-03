@@ -259,31 +259,15 @@ export default class App extends React.Component {
       this.arrows.splice(index, 1);
     }
 
-    this.heart.rotation.y += Math.PI/32
+    this.heart.rotation.y += Math.PI / 32;
     this.renderer.render(this.scene, this.camera);
   };
 
   showPosition = async () => {
     await playSound('shoot');
     this.setState({ hasShot: true });
-    var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
-    dir.normalize();
-    var origin = new THREE.Vector3(
-      this.position.x,
-      this.position.y,
-      this.position.z
-    );
-    var length = 0.5;
-    var hex = 0x00ff00;
-    var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 1, 0.05);
-    arrowHelper.velocity = new THREE.Vector3(
-      this.aim.x,
-      this.aim.y,
-      this.aim.z
-    );
 
-    this.arrows.push(arrowHelper);
-    this.scene.add(arrowHelper);
+    this.createLaser(this.position, this.aim);
 
     socket.emit(SHOOT, {
       position: this.position,
@@ -292,4 +276,25 @@ export default class App extends React.Component {
 
     this.cooldown();
   };
+
+  createLaser(position, aim) {
+    var dir = new THREE.Vector3(aim.x, aim.y, aim.z);
+    dir.normalize();
+    var origin = new THREE.Vector3(
+      position.x,
+      position.y,
+      position.z
+    );
+    var length = 0.5;
+    var hex = 0x00ff00;
+    var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 1, 0.05);
+    arrowHelper.velocity = new THREE.Vector3(
+      aim.x,
+      aim.y,
+      aim.z
+    );
+
+    this.arrows.push(arrowHelper);
+    this.scene.add(arrowHelper);
+  }
 }
