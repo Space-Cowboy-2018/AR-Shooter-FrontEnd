@@ -36,7 +36,14 @@ export default class Lobby extends Component {
   }
 
   startGame() {
-    socket.emit(START_GAME);
+    if (!this.disableButton()) {
+      socket.emit(START_GAME);
+    } else {
+      Toast.show({
+        text: 'Game is still in session. Please wait for it to end.',
+        buttonText: 'Okay'
+      });
+    }
   }
 
   handleLeaveRoom() {
@@ -60,7 +67,8 @@ export default class Lobby extends Component {
         <Button
           style={styles.backButtonContainer}
           transparent
-          onPress={this.handleLeaveRoom}>
+          onPress={this.handleLeaveRoom}
+        >
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <Text style={styles.title}>Lobby</Text>
@@ -74,8 +82,8 @@ export default class Lobby extends Component {
             marginRight: 20,
             marginBottom: 20
           }}
-          disabled={this.disableButton()}
-          full>
+          full
+        >
           <Text style={{ letterSpacing: 2 }}>Blast Off</Text>
         </Button>
         <Content>
