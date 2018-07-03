@@ -66,6 +66,10 @@ export default class App extends React.Component {
       }
     });
 
+    socket.on(LASER_SHOT, ({position, aim}) => {
+      this.createLaser(position, aim);
+    })
+
     socket.on(YOU_HIT, () => {
       //do something with image, maybe zoom in for a second?
       this.setState({ crosshair: 200 });
