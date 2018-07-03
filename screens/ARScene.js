@@ -59,16 +59,16 @@ export default class App extends React.Component {
       Vibration.vibrate(1000);
       this.setState(prevState => ({ health: prevState.health - 1 }));
       if (this.state.health <= 0) {
-        navigate('GameOver');
+        navigate('GameOver', { room: this.props.navigation.state.params.room });
       }
     });
 
     socket.on(YOU_HIT, () => {
-      //do something with image
+      //do something with image, maybe zoom in for a second?
     });
 
     socket.on(WINNER, () => {
-      navigate('Winner');
+      navigate('Winner', { room: this.props.navigation.state.params.room });
     });
 
     socket.on('disconnect', () => {
@@ -145,8 +145,8 @@ export default class App extends React.Component {
 
         <View style={styles.centerOverlay}>
           <Image
-            style={{ width: 100, height: 100 }}
-            source={require('../assets/images/crosshair.png')}
+            style={{ width: 150, height: 150 }}
+            source={require('../assets/images/futuristic_crosshair.png')}
           />
         </View>
       </TouchableOpacity>
@@ -220,6 +220,7 @@ export default class App extends React.Component {
       this.scene.remove(this.arrows[index]);
       this.arrows.splice(index, 1);
     }
+
     this.renderer.render(this.scene, this.camera);
   };
 
