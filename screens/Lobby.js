@@ -20,6 +20,7 @@ export default class Lobby extends Component {
     };
     this.startGame = this.startGame.bind(this);
     this.handleLeaveRoom = this.handleLeaveRoom.bind(this);
+    this.disableButton = this.disableButton.bind(this);
   }
 
   componentDidMount() {
@@ -34,8 +35,6 @@ export default class Lobby extends Component {
     });
   }
 
-  componentWillUnmount() {
-  }
   startGame() {
     socket.emit(START_GAME);
   }
@@ -48,6 +47,11 @@ export default class Lobby extends Component {
       buttonText: 'Okay'
     });
     this.props.navigation.navigate('AllRooms');
+  }
+
+  disableButton() {
+    if (this.state.room.some(player => player.inSession)) return true;
+    return false;
   }
 
   render() {
@@ -70,6 +74,7 @@ export default class Lobby extends Component {
             marginRight: 20,
             marginBottom: 20
           }}
+          disabled={this.disableButton()}
           full>
           <Text style={{ letterSpacing: 2 }}>Blast Off</Text>
         </Button>
