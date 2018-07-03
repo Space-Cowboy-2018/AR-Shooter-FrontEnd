@@ -24,6 +24,7 @@ const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
 const YOU_HIT = 'YOU_HIT';
 const WINNER = 'WINNER';
+const LASER_SHOT = 'LASER_SHOT';
 
 export default class App extends React.Component {
   constructor(props) {
