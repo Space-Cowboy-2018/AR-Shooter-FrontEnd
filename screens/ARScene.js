@@ -11,7 +11,8 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
-import { loadSounds, playSound, prepareSound } from '../utils/sound'
+import { loadSounds, playSound, prepareSound } from '../utils/sound';
+import heartPosition from '../utils/heartPosition';
 import laser from '../assets/audio/laser.mp3';
 
 import styles from '../styles/globals';
