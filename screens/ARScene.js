@@ -82,6 +82,8 @@ export default class App extends React.Component {
   componentWillUnmount() {
     socket.off(SHOT);
     socket.off(UPDATE_PLAYER_MOVEMENT);
+    socket.off(YOU_HIT);
+    socket.off(WINNER);
     console.log = this.logs; // assigns console.log back to itself
   }
 
