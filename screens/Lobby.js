@@ -20,6 +20,7 @@ export default class Lobby extends Component {
     };
     this.startGame = this.startGame.bind(this);
     this.handleLeaveRoom = this.handleLeaveRoom.bind(this);
+    this.disableButton = this.disableButton.bind(this);
   }
 
   componentDidMount() {
@@ -35,7 +36,14 @@ export default class Lobby extends Component {
   }
 
   startGame() {
-    socket.emit(START_GAME);
+    if (!this.disableButton()) {
+      socket.emit(START_GAME);
+    } else {
+      Toast.show({
+        text: 'Game is still in session. Please wait for it to end.',
+        buttonText: 'Okay'
+      });
+    }
   }
 
   handleLeaveRoom() {
@@ -48,13 +56,19 @@ export default class Lobby extends Component {
     this.props.navigation.navigate('AllRooms');
   }
 
+  disableButton() {
+    if (this.state.room.some(player => player.inSession)) return true;
+    return false;
+  }
+
   render() {
     return (
       <View style={styles.main}>
         <Button
           style={styles.backButtonContainer}
           transparent
-          onPress={this.handleLeaveRoom}>
+          onPress={this.handleLeaveRoom}
+        >
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <Text style={styles.title}>Lobby</Text>
@@ -68,7 +82,8 @@ export default class Lobby extends Component {
             marginRight: 20,
             marginBottom: 20
           }}
-          full>
+          full
+        >
           <Text style={{ letterSpacing: 2 }}>Blast Off</Text>
         </Button>
         <Content>
