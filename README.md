@@ -15,6 +15,7 @@ Space Cowboy is designed to be an Augmented Reality mutliply player laser-tag. P
 <img src="https://github.com/Space-Cowboy-2018/proof-of-concept/blob/master/public/Space%20Cowboy%20Tech%20Stack%20(1).png" width="300"> 
 
 Space Cowboy
+
 Frontend : [React-Native](https://facebook.github.io/react-native/),[ Socket.io](https://socket.io/), [Three.js](https://threejs.org/), [Expo-AR](https://expo.io/)
 
 Backend : [Node.js](https://nodejs.org/en/), [Socket.io](https://socket.io/), [Redux](https://redux.js.org/), [Express.js](https://expressjs.com/)
