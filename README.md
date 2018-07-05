@@ -3,7 +3,7 @@
 
 ## AR Laser Tag
 
-Player 1  (Iphone X)           |  Player 2 (Iphone 6s)
+Player 1  (Iphone 6S)           |  Player 2 (Iphone X)
 :-------------------------:|:-------------------------:
 <img src="https://github.com/Space-Cowboy-2018/proof-of-concept/blob/master/public/preview4.gif" width="150">  |  <img src="https://github.com/Space-Cowboy-2018/proof-of-concept/blob/master/public/preview5.gif" width="150">
 
