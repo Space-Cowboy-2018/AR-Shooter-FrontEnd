@@ -55,3 +55,14 @@ Testing : [Mocha](https://mochajs.org/)
 
 - see list of rooms. https://ar-shooter-server.herokuapp.com/rooms
 
+### Developers
+___
+
+[David Castro](https://github.com/DavidGcastro)
+
+[Isaias Pomales](https://github.com/impomales)
+
+[John Hui](https://github.com/mjhui1990)
+
+[Ricard Lanchez](https://github.com/richardsunny2015)
+
