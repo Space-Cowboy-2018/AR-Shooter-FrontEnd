@@ -64,5 +64,5 @@ ___
 
 [John Hui](https://github.com/mjhui1990)
 
-[Ricard Lanchez](https://github.com/richardsunny2015)
+[Richard Lanchez](https://github.com/richardsunny2015)
 
